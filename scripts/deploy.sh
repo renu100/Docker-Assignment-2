@@ -12,6 +12,7 @@ sudo docker-compose down || echo "No running containers to stop."
 
 # Pull the latest Docker image from ECR
 echo "Pulling the latest Docker image from ECR..."
+echo "Using image tag: $CODEBUILD_BUILD_ID"  # Debugging to check the tag
 sudo docker pull 942731209985.dkr.ecr.ap-south-1.amazonaws.com/poc-repo:${CODEBUILD_BUILD_ID} || { echo 'Docker pull failed'; exit 1; }
 
 # Remove any previous container running the app
@@ -25,4 +26,3 @@ sudo docker run -d -p 8080:8080 --name flask-app-container 942731209985.dkr.ecr.
 # Verify if the container is running
 echo "Checking running containers..."
 sudo docker ps
-
