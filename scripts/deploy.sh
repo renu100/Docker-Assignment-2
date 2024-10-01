@@ -4,7 +4,7 @@
 cd /home/ec2-user/flask-app
 
 # Stop any existing Docker containers
-docker-compose down || echo "No running containers to stop."
+#docker-compose down || echo "No running containers to stop."
 
 # Pull the latest Docker image from ECR
 docker pull 942731209985.dkr.ecr.ap-south-1.amazonaws.com/poc-repo:${CODEBUILD_BUILD_ID}
