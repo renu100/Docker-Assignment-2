@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ec2-user/flask-app
+cd /root/flask-app
 
 # Get the latest git commit hash as the image tag
 IMAGE_TAG=$(git rev-parse --short HEAD)
