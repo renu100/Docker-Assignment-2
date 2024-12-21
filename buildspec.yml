@@ -1,20 +1,38 @@
 version: 0.2
 
+env:
+  variables:
+    ECR_REPO_URI: "942731209985.dkr.ecr.ap-south-1.amazonaws.com/poc-repo"
+    REGION: "ap-south-1"
+
 phases:
+  install:
+    runtime-versions:
+      docker: 20
+    commands:
+      - echo Installing dependencies...
+      - yum install -y aws-cli
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 942731209985.dkr.ecr.ap-south-1.amazonaws.com
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t poc-repo .
-      - docker tag poc-repo:latest 942731209985.dkr.ecr.ap-south-1.amazonaws.com/poc-repo:latest
+      - docker tag poc-repo:latest $ECR_REPO_URI:latest
+      - echo Listing Docker images...
       - docker images
   post_build:
     commands:
-      - echo Pushing the Docker image to ECR...
-      - docker push 942731209985.dkr.ecr.ap-south-1.amazonaws.com/poc-repo:latest
+      - echo Pushing the Docker image to Amazon ECR...
+      - docker push $ECR_REPO_URI:latest
       - echo Build completed on `date`
-
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: yes
+cache:
+  paths:
+    - "/root/.cache/**/*"
