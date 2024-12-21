@@ -1,11 +1,10 @@
 version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /home/ec2-user/flask-app
-hooks:
-  AfterInstall:
-    - location: scripts/deploy.sh
-      timeout: 300
-      runas: ec2-user
-
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: 
+          Ref: TASK_DEFINITION_NAME
+        LoadBalancerInfo:
+          ContainerName: !Ref ECS_CONTAINER
+          ContainerPort: 80 # Replace this with the actual container port used in your service.
